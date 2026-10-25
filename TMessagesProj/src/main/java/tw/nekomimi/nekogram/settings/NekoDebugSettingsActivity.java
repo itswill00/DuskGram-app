@@ -76,7 +76,7 @@ public class NekoDebugSettingsActivity extends BaseNekoXSettingsActivity {
     // 切换版本
     private final AbstractConfigCell switchVersionRow = cellGroup.appendCell(new ConfigCellText("SwitchVersion", () -> {
         if (getParentActivity() == null) return;
-        Browser.openUrl(getParentActivity(), "https://github.com/itswill00/DuskGram/releases");
+        Browser.openUrl(getParentActivity(), "https://github.com/itswill00/DuskGram-app/releases");
     }));
 
     // 检查更新

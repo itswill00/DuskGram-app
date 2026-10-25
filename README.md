@@ -9,14 +9,14 @@ DuskGram keeps everything the upstream forks offer and adds its own branding,
 icon themes and build tooling. It is **not** affiliated with, endorsed by, or an
 official release of Telegram or the Nagram project.
 
-- **Releases:** <https://github.com/itswill00/DuskGram/releases>
-- **Source:** <https://github.com/itswill00/DuskGram>
+- **Releases:** <https://github.com/itswill00/DuskGram-app/releases>
+- **Source:** <https://github.com/itswill00/DuskGram-app>
 - **Package name:** `app.duskgram.messenger`
 
 ## Downloads
 
 Grab the APK for your device from the
-[latest release](https://github.com/itswill00/DuskGram/releases/latest):
+[latest release](https://github.com/itswill00/DuskGram-app/releases/latest):
 
 | ABI | Who it is for |
 |---|---|
@@ -70,7 +70,7 @@ export ANDROID_HOME=/path/to/android-sdk
 ### First checkout
 
 ```bash
-git clone https://github.com/itswill00/DuskGram.git
+git clone https://github.com/itswill00/DuskGram-app.git
 cd DuskGram
 git submodule update --init --recursive
 ```

@@ -114,7 +114,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
         } else if (position == channelRow) {
             getMessagesController().openByUserName(channelUsername, this, 1);
         } else if (position == sourceCodeRow) {
-            Browser.openUrl(getParentActivity(), "https://github.com/itswill00/DuskGram");
+            Browser.openUrl(getParentActivity(), "https://github.com/itswill00/DuskGram-app");
         } else if (position == translationRow) {
             Browser.openUrl(getParentActivity(), "https://xtaolabs.crowdin.com/nagram");
         } else if (position == datacenterRow) {

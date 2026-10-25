@@ -355,7 +355,7 @@ if [[ $DO_SEND -eq 1 ]]; then
         CAPTION+="$(printf '\n• %s' "$line")"
       done <<<"$BULLETS"
     fi
-    CAPTION+="$(printf '\n\n<a href="https://github.com/itswill00/DuskGram/releases/tag/%s">GitHub release</a>' "$TAG")"
+    CAPTION+="$(printf '\n\n<a href="https://github.com/itswill00/DuskGram-app/releases/tag/%s">GitHub release</a>' "$TAG")"
 
     c_info "posting ${#APKS[@]} APK(s) to Telegram"
     if [[ ! -x "$ROOT/scripts/tg-upload.sh" ]]; then

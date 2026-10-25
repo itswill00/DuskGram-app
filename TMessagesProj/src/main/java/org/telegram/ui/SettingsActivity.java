@@ -1502,7 +1502,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             listView.adapter.update(true);
         });
         o.add(R.drawable.msg_retry, LocaleController.getString(R.string.SwitchVersion), () -> {
-            Browser.openUrl(getContext(), "https://github.com/itswill00/DuskGram/releases");
+            Browser.openUrl(getContext(), "https://github.com/itswill00/DuskGram-app/releases");
         });
 
         o.add(R.drawable.msg_search, LocaleController.getString(R.string.CheckUpdate), () -> {

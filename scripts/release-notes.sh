@@ -98,7 +98,7 @@ cat <<EOF
 An independent Telegram client for Android, built from the Nagram codebase.
 
 **Version** \`$VERSION\` · **Build** \`$CODE\` · **Upstream** Telegram \`$UP_VERSION\` ($UP_CODE)
-**Commit** [\`$SHA\`](https://github.com/itswill00/DuskGram/commit/$SHA_FULL) on \`$BRANCH\`
+**Commit** [\`$SHA\`](https://github.com/itswill00/DuskGram-app/commit/$SHA_FULL) on \`$BRANCH\`
 
 ## Downloads
 

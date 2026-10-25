@@ -4837,7 +4837,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     updateListAnimated(false);
                 });
                 o.add(R.drawable.msg_retry, LocaleController.getString(R.string.SwitchVersion), () -> {
-                    Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/itswill00/DuskGram/releases");
+                    Browser.openUrl(ProfileActivity.this.getParentActivity(), "https://github.com/itswill00/DuskGram-app/releases");
                 });
 
                 o.add(R.drawable.msg_search, LocaleController.getString(R.string.CheckUpdate), () -> {

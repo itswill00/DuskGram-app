@@ -31,7 +31,7 @@ import java.net.URL
 object GithubUpdater {
 
     private const val RELEASES_API =
-        "https://api.github.com/repos/itswill00/DuskGram/releases/latest"
+        "https://api.github.com/repos/itswill00/DuskGram-app/releases/latest"
 
     private const val CONNECT_TIMEOUT = 15_000
     private const val READ_TIMEOUT = 30_000

@@ -11,7 +11,7 @@ import org.telegram.ui.ActionBar.AlertDialog
 object UpdateUtil {
 
     const val channelUsername = "duskgramclient"
-    const val wikiUrl = "https://github.com/itswill00/DuskGram"
+    const val wikiUrl = "https://github.com/itswill00/DuskGram-app"
 
     @JvmStatic
     fun getChannelUrl(): String {
