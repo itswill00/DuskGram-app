@@ -158,8 +158,9 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
             ((TextCheckCell) view).setChecked(NekoConfig.showGhostModeStatus.Bool());
             NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
         } else if (position == showGhostToggleInDrawerRow) {
-            NekoConfig.putBoolean("showGhostToggleInDrawer", NekoConfig.showGhostToggleInDrawer ^= true);
-            ((TextCheckCell) view).setChecked(NekoConfig.showGhostToggleInDrawer);
+            NekoConfig.showGhostToggleInDrawer.setConfigBool(!NekoConfig.showGhostToggleInDrawer.Bool());
+            NekoConfig.showGhostToggleInDrawer.saveConfig();
+            ((TextCheckCell) view).setChecked(NekoConfig.showGhostToggleInDrawer.Bool());
 
             NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
         }
@@ -221,7 +222,7 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
                     if (position == markReadAfterSendRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.MarkReadAfterAction), NekoConfig.markReadAfterSend, divider);
                     } else if (position == showGhostToggleInDrawerRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.GhostMode), NekoConfig.showGhostToggleInDrawer, divider);
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.GhostMode), NekoConfig.showGhostToggleInDrawer.Bool(), divider);
                     } else if (position == lockReadRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.LockDontReadMessages), NekoConfig.isGhostLocked("sendReadMessagePacketsLocked"), divider);
                     } else if (position == lockOnlineRow) {

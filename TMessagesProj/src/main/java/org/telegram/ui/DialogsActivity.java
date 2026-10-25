@@ -13972,7 +13972,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     });
                     break;
                 case "ghost":
-                    io.addIf(NekoConfig.showGhostToggleInDrawer, R.drawable.icon_ghost, ghostDrawerTitle(), () -> {
+                    io.addIf(NekoConfig.showGhostToggleInDrawer.Bool(), R.drawable.icon_ghost, ghostDrawerTitle(), () -> {
                         presentFragment(new NekoGhostModeActivity());
                     });
                     break;

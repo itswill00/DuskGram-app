@@ -1,6 +1,5 @@
 package tw.nekomimi.nekogram.settings;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 
@@ -11,7 +10,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextCell;
@@ -172,7 +170,6 @@ public class DrawerMenuActivity extends BaseReorderManagerActivity {
             super(context);
         }
 
-        @SuppressLint("NewApi")
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, boolean partial, boolean divider) {
             switch (holder.getItemViewType()) {

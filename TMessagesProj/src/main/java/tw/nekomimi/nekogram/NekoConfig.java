@@ -33,7 +33,6 @@ public class NekoConfig {
     public static boolean sendUploadProgress;
     public static boolean sendReadStoryPackets;
     public static boolean markReadAfterSend;
-    public static boolean showGhostToggleInDrawer;
     // Locked flags stay enforced even when Ghost Mode is switched off, so a
     // single toggle cannot accidentally reveal activity.
     public static boolean sendReadMessagePacketsLocked;
@@ -202,6 +201,8 @@ public class NekoConfig {
     // Ghost Mode status next to the drawer entry; promoted from a plain field so
     // it can back a settings row.
     public static ConfigItem showGhostModeStatus = addConfig("showGhostModeStatus", configTypeBool, false);
+    // Show the Ghost Mode entry in the main menu drawer.
+    public static ConfigItem showGhostToggleInDrawer = addConfig("showGhostToggleInDrawer", configTypeBool, false);
     // Comma separated drawer row order; see DrawerOrder.
     public static ConfigItem drawerOrder = addConfig("drawerOrder", configTypeString, "");
     // Ads are suppressed by default; the switch only exists so it can be re-enabled.
@@ -308,7 +309,6 @@ public class NekoConfig {
             sendOfflineAfterOnline = preferences.getBoolean("sendOfflineAfterOnline", false);
             markReadAfterSend = preferences.getBoolean("markReadAfterSend", true);
             // ~ Ghost other options
-            showGhostToggleInDrawer = preferences.getBoolean("showGhostToggleInDrawer", false);
             sendReadMessagePacketsLocked = preferences.getBoolean("sendReadMessagePacketsLocked", false);
             sendOnlinePacketsLocked = preferences.getBoolean("sendOnlinePacketsLocked", false);
             sendUploadProgressLocked = preferences.getBoolean("sendUploadProgressLocked", false);
