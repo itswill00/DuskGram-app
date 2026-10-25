@@ -84,7 +84,18 @@ public class CellGroup {
     }
 
     public boolean needSetDivider(AbstractConfigCell cell) {
-        return !(rows.get(rows.indexOf(cell) + 1) instanceof ConfigCellDivider);
+        int index = rows.indexOf(cell);
+        if (index < 0) {
+            return true;
+        }
+        int next = index + 1;
+        // The last row has nothing below it, so it draws no divider. Without
+        // this bound the lookup throws and RecyclerView keeps retrying the bind,
+        // which turns into an ANR rather than a normal crash.
+        if (next >= rows.size()) {
+            return false;
+        }
+        return !(rows.get(next) instanceof ConfigCellDivider);
     }
 
 }
