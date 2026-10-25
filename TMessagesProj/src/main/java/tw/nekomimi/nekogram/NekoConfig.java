@@ -41,7 +41,6 @@ public class NekoConfig {
     public static boolean sendUploadProgressLocked;
     public static boolean sendReadStoryPacketsLocked;
     public static boolean sendOfflineAfterOnlineLocked;
-    public static ConfigItem showGhostModeStatus = addConfig("showGhostModeStatus", configTypeBool, false);
     public static final String channelAliasPrefix = "channelAliasPrefix_";
 
     private static boolean configLoaded = false;
@@ -200,6 +199,9 @@ public class NekoConfig {
     public static ConfigItem hideGroupSticker = addConfig("hideGroupSticker", configTypeBool, false);
     public static ConfigItem disablePremiumStickerAnimation = addConfig("disablePremiumStickerAnimation", configTypeBool, false);
     public static ConfigItem hideSponsoredMessage = addConfig("hideSponsoredMessage", configTypeBool, false);
+    // Ghost Mode status next to the drawer entry; promoted from a plain field so
+    // it can back a settings row.
+    public static ConfigItem showGhostModeStatus = addConfig("showGhostModeStatus", configTypeBool, false);
     // Comma separated drawer row order; see DrawerOrder.
     public static ConfigItem drawerOrder = addConfig("drawerOrder", configTypeString, "");
     // Ads are suppressed by default; the switch only exists so it can be re-enabled.
