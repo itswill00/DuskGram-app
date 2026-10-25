@@ -13,8 +13,8 @@ import org.telegram.messenger.R;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.HeaderCell;
-import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
+import org.telegram.ui.Cells.TextCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +52,7 @@ public class DrawerMenuActivity extends BaseReorderManagerActivity {
 
     @Override
     public View createView(Context context) {
+        updateRows();
         View view = super.createView(context);
 
         resetItem = addResetMenuItem(MENU_RESET);
@@ -179,14 +180,12 @@ public class DrawerMenuActivity extends BaseReorderManagerActivity {
                     ((HeaderCell) holder.itemView).setText(LocaleController.getString(R.string.DrawerOrderTitle));
                     break;
                 }
-                case TYPE_SETTINGS: {
+                case TYPE_TEXT: {
                     TextCell cell = (TextCell) holder.itemView;
-                    if (position >= orderStartRow && position <= orderEndRow) {
-                        int index = position - orderStartRow;
-                        String id = index < order.size() ? order.get(index) : "";
-                        cell.setText(labelFor(id), false);
-                        applyReorderHandle(cell);
-                    }
+                    int index = position - orderStartRow;
+                    String id = index >= 0 && index < order.size() ? order.get(index) : "";
+                    cell.setTextAndIcon(labelFor(id), R.drawable.list_reorder, false);
+                    applyReorderHandle(cell);
                     break;
                 }
                 case TYPE_INFO_PRIVACY: {
@@ -202,7 +201,7 @@ public class DrawerMenuActivity extends BaseReorderManagerActivity {
                 return TYPE_HEADER;
             }
             if (position >= orderStartRow && position <= orderEndRow) {
-                return TYPE_SETTINGS;
+                return TYPE_TEXT;
             }
             if (position == infoRow) {
                 return TYPE_INFO_PRIVACY;
