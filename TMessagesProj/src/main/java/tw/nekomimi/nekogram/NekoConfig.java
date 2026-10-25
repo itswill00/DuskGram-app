@@ -203,6 +203,8 @@ public class NekoConfig {
     public static ConfigItem showGhostModeStatus = addConfig("showGhostModeStatus", configTypeBool, false);
     // Show the Ghost Mode entry in the main menu drawer.
     public static ConfigItem showGhostToggleInDrawer = addConfig("showGhostToggleInDrawer", configTypeBool, false);
+    // Ghost Mode: send outgoing messages as scheduled so no online status is sent.
+    public static ConfigItem useScheduledMessages = addConfig("useScheduledMessages", configTypeBool, false);
     // Comma separated drawer row order; see DrawerOrder.
     public static ConfigItem drawerOrder = addConfig("drawerOrder", configTypeString, "");
     // Ads are suppressed by default; the switch only exists so it can be re-enabled.

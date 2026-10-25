@@ -129,6 +129,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import tw.nekomimi.nekogram.NekoConfig;
 import top.qwq2333.nullgram.utils.StringUtils;
 import xyz.nextalone.nagram.NaConfig;
 
@@ -2242,6 +2243,12 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (messages == null || messages.isEmpty()) {
             return 0;
         }
+        // Ghost Mode: send as scheduled so the peer never sees us online.
+        // scheduleDate stays untouched because it is captured by lambdas below.
+        final int effectiveScheduleDate = NekoConfig.useScheduledMessages.Bool()
+                && scheduleDate == 0 && !DialogObject.isEncryptedDialog(peer)
+                ? getConnectionsManager().getCurrentTime() + 12
+                : scheduleDate;
         int sendResult = 0;
         long myId = getUserConfig().getClientUserId();
         boolean isChannel = false;
@@ -2266,7 +2273,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             }
             if (currentPayStars != payStars) {
                 AlertsCreator.ensurePaidMessageConfirmation(currentAccount, peer, Math.max(1, messages.size()), newPayStars -> {
-                    sendMessage(messages, peer, forwardFromMyName, hideCaption, notify, scheduleDate, scheduleRepeatPeriod, replyToTopMsg, video_timestamp, newPayStars, monoForumPeerId, suggestionParams);
+                    sendMessage(messages, peer, forwardFromMyName, hideCaption, notify, effectiveScheduleDate, scheduleRepeatPeriod, replyToTopMsg, video_timestamp, newPayStars, monoForumPeerId, suggestionParams);
                 });
                 return 0;
             }
@@ -2333,7 +2340,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             entities = pair.getSecond();
                         }
 
-                        final SendMessageParams params = SendMessageParams.of(messageText, peer, null, replyToTopMsg, webPage, webPage != null, msgObj.messageOwner.entities, null, null, notify, scheduleDate, scheduleRepeatPeriod, null, false);
+                        final SendMessageParams params = SendMessageParams.of(messageText, peer, null, replyToTopMsg, webPage, webPage != null, msgObj.messageOwner.entities, null, null, notify, effectiveScheduleDate, scheduleRepeatPeriod, null, false);
                         params.suggestionParams = suggestionParams;
                         params.monoForumPeer = monoForumPeerId;
                         params.quick_reply_shortcut = msgObj.getQuickReplyName();
@@ -2629,15 +2636,15 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 } else {
                     ids.add(newMsg.fwd_msg_id);
                 }
-                newMsg.date = scheduleDate != 0 ? scheduleDate : getConnectionsManager().getCurrentTime();
+                newMsg.date = effectiveScheduleDate != 0 ? effectiveScheduleDate : getConnectionsManager().getCurrentTime();
                 if (inputPeer instanceof TLRPC.TL_inputPeerChannel && isChannel) {
-                    if (scheduleDate == 0) {
+                    if (effectiveScheduleDate == 0) {
                         newMsg.views = 1;
                         newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_VIEWS;
                     }
                 } else {
                     if ((msgObj.messageOwner.flags & TLRPC.MESSAGE_FLAG_HAS_VIEWS) != 0) {
-                        if (scheduleDate == 0) {
+                        if (effectiveScheduleDate == 0) {
                             newMsg.views = msgObj.messageOwner.views;
                             newMsg.flags |= TLRPC.MESSAGE_FLAG_HAS_VIEWS;
                         }
@@ -2676,7 +2683,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 }
 
                 MessageObject newMsgObj = new MessageObject(currentAccount, newMsg, true, true);
-                newMsgObj.scheduled = scheduleDate != 0;
+                newMsgObj.scheduled = effectiveScheduleDate != 0;
                 newMsgObj.messageOwner.send_state = MessageObject.MESSAGE_SEND_STATE_SENDING;
                 newMsgObj.wasJustSent = true;
                 objArr.add(newMsgObj);
@@ -2693,7 +2700,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     }
                 }
 
-                putToSendingMessages(newMsg, scheduleDate != 0);
+                putToSendingMessages(newMsg, effectiveScheduleDate != 0);
                 boolean differentDialog = false;
 
                 if (BuildVars.LOGS_ENABLED) {
@@ -2711,8 +2718,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 }
 
                 if (arr.size() == 100 || a == messages.size() - 1 || a != messages.size() - 1 && messages.get(a + 1).getDialogId() != msgObj.getDialogId()) {
-                    getMessagesStorage().putMessages(new ArrayList<>(arr), false, true, false, 0, scheduleDate != 0 ? 1 : 0, 0);
-                    getMessagesController().updateInterfaceWithMessages(peer, objArr, scheduleDate != 0 ? 1 : 0);
+                    getMessagesStorage().putMessages(new ArrayList<>(arr), false, true, false, 0, effectiveScheduleDate != 0 ? 1 : 0, 0);
+                    getMessagesController().updateInterfaceWithMessages(peer, objArr, effectiveScheduleDate != 0 ? 1 : 0);
                     getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
                     getUserConfig().saveConfig(false);
 
@@ -2723,8 +2730,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         req.top_msg_id = replyToTopMsg.getId();
                         req.flags |= 512;
                     }
-                    if (scheduleDate != 0) {
-                        req.schedule_date = scheduleDate;
+                    if (effectiveScheduleDate != 0) {
+                        req.schedule_date = effectiveScheduleDate;
                         req.flags |= 1024;
                         if (scheduleRepeatPeriod != 0) {
                             req.schedule_repeat_period = scheduleRepeatPeriod;
@@ -2767,7 +2774,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     final ArrayList<TLRPC.Message> newMsgObjArr = arr;
                     final ArrayList<MessageObject> newMsgArr = new ArrayList<>(objArr);
                     final LongSparseArray<TLRPC.Message> messagesByRandomIdsFinal = messagesByRandomIds;
-                    final boolean scheduledOnline = scheduleDate == 0x7FFFFFFE;
+                    final boolean scheduledOnline = effectiveScheduleDate == 0x7FFFFFFE;
                     final Runnable send = () -> {
                         getConnectionsManager().sendRequest(req, (response, error) -> {
                             if (error == null) {
@@ -2795,7 +2802,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                     TLRPC.Update update = updates.updates.get(a1);
                                     if (update instanceof TL_update.TL_updateNewMessage || update instanceof TL_update.TL_updateNewChannelMessage || update instanceof TL_update.TL_updateNewScheduledMessage || update instanceof TL_update.TL_updateQuickReplyMessage) {
                                         boolean currentSchedule = false;
-                                        boolean scheduled = scheduleDate != 0;
+                                        boolean scheduled = effectiveScheduleDate != 0;
 
                                         updates.updates.remove(a1);
                                         a1--;
@@ -2876,19 +2883,19 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                                             getMessagesController().updateInterfaceWithMessages(newMsgObj1.dialog_id, messageObjects, toMode);
                                                             getMediaDataController().increasePeerRaiting(newMsgObj1.dialog_id);
                                                             processSentMessage(oldId);
-                                                            removeFromSendingMessages(oldId, scheduleDate != 0);
+                                                            removeFromSendingMessages(oldId, effectiveScheduleDate != 0);
                                                         });
                                                     });
                                                 });
                                             } else {
                                                 getMessagesStorage().getStorageQueue().postRunnable(() -> {
-                                                    int mode = scheduleDate != 0 ? ChatActivity.MODE_SCHEDULED : 0;
+                                                    int mode = effectiveScheduleDate != 0 ? ChatActivity.MODE_SCHEDULED : 0;
                                                     if (MessageObject.isWelcomeMessage(message)) {
                                                         mode = ChatActivity.MODE_WELCOME_MESSAGES;
                                                     } else if (message.quick_reply_shortcut_id != 0 || message.quick_reply_shortcut != null) {
                                                         mode = ChatActivity.MODE_QUICK_REPLIES;
                                                     }
-                                                    getMessagesStorage().updateMessageStateAndId(newMsgObj1.random_id, MessageObject.getPeerId(peer_id), oldId, newMsgObj1.id, 0, false, scheduleDate != 0 ? 1 : 0, message.quick_reply_shortcut_id);
+                                                    getMessagesStorage().updateMessageStateAndId(newMsgObj1.random_id, MessageObject.getPeerId(peer_id), oldId, newMsgObj1.id, 0, false, effectiveScheduleDate != 0 ? 1 : 0, message.quick_reply_shortcut_id);
                                                     getMessagesStorage().putMessages(sentMessages, true, false, false, 0, mode, message.quick_reply_shortcut_id);
                                                     if (MessageObject.isEphemeralAndNotWelcome(newMsgObj1)) {
                                                         final long dialogId = MessageObject.getPeerId(newMsgObj1.peer_id);
@@ -2902,10 +2909,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                                     AndroidUtilities.runOnUIThread(() -> {
                                                         newMsgObj1.send_state = MessageObject.MESSAGE_SEND_STATE_SENT;
                                                         getMediaDataController().increasePeerRaiting(peer);
-                                                        getNotificationCenter().postNotificationName(NotificationCenter.messageReceivedByServer, oldId, message.id, message, peer, 0L, existFlags, scheduleDate != 0);
-                                                        getNotificationCenter().postNotificationName(NotificationCenter.messageReceivedByServer2, oldId, message.id, message, peer, 0L, existFlags, scheduleDate != 0);
+                                                        getNotificationCenter().postNotificationName(NotificationCenter.messageReceivedByServer, oldId, message.id, message, peer, 0L, existFlags, effectiveScheduleDate != 0);
+                                                        getNotificationCenter().postNotificationName(NotificationCenter.messageReceivedByServer2, oldId, message.id, message, peer, 0L, existFlags, effectiveScheduleDate != 0);
                                                         processSentMessage(oldId);
-                                                        removeFromSendingMessages(oldId, scheduleDate != 0);
+                                                        removeFromSendingMessages(oldId, effectiveScheduleDate != 0);
                                                     });
                                                 });
                                             }
@@ -2924,7 +2931,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             }
                             for (int a1 = 0; a1 < newMsgObjArr.size(); a1++) {
                                 final TLRPC.Message newMsgObj1 = newMsgObjArr.get(a1);
-                                getMessagesStorage().markMessageAsSendError(newMsgObj1, scheduleDate != 0 ? 1 : 0);
+                                getMessagesStorage().markMessageAsSendError(newMsgObj1, effectiveScheduleDate != 0 ? 1 : 0);
                                 if (error != null && error.text != null && error.text.startsWith("ALLOW_PAYMENT_REQUIRED_")) {
                                     newMsgObj1.errorAllowedPriceStars = StarsController.getInstance(currentAccount).getAllowedPaidStars(req);
                                     newMsgObj1.errorNewPriceStars = Long.parseLong(error.text.substring("ALLOW_PAYMENT_REQUIRED_".length())) / req.id.size();
@@ -2934,7 +2941,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                     newMsgObj1.send_state = MessageObject.MESSAGE_SEND_STATE_SEND_ERROR;
                                     getNotificationCenter().postNotificationName(NotificationCenter.messageSendError, newMsgObj1.id);
                                     processSentMessage(newMsgObj1.id);
-                                    removeFromSendingMessages(newMsgObj1.id, scheduleDate != 0);
+                                    removeFromSendingMessages(newMsgObj1.id, effectiveScheduleDate != 0);
                                 });
                             }
                             if (error != null && error.text != null && error.text.startsWith("ALLOW_PAYMENT_REQUIRED_")) {
@@ -4466,6 +4473,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         TLRPC.ReplyMarkup replyMarkup = sendMessageParams.replyMarkup;
         HashMap<String, String> params = sendMessageParams.params;
         boolean notify = sendMessageParams.notify;
+        // Ghost Mode: send as scheduled so the peer never sees us online.
+        // Only new messages are converted; retries already carry a server date.
+        if (NekoConfig.useScheduledMessages.Bool() && sendMessageParams.scheduleDate == 0
+                && sendMessageParams.retryMessageObject == null
+                && !DialogObject.isEncryptedDialog(sendMessageParams.peer)) {
+            sendMessageParams.scheduleDate = getConnectionsManager().getCurrentTime() + 12;
+        }
         int scheduleDate = sendMessageParams.scheduleDate;
         int scheduleRepeatPeriod = sendMessageParams.scheduleRepeatPeriod;
         int ttl = sendMessageParams.ttl;

@@ -41,6 +41,7 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
     private int lockUploadRow;
     private int lockStoryRow;
     private int lockOfflineRow;
+    private int useScheduledMessagesRow;
     private int showGhostModeStatusRow;
 
     private int ghostDividerRow;
@@ -74,6 +75,7 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
         lockUploadRow = addRow();
         lockStoryRow = addRow();
         lockOfflineRow = addRow();
+        useScheduledMessagesRow = addRow();
         showGhostModeStatusRow = addRow();
         ghostDividerRow = addRow();
         DrawerHeaderRow = addRow();
@@ -152,6 +154,10 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
             toggleLock("sendReadStoryPacketsLocked", (TextCheckCell) view);
         } else if (position == lockOfflineRow) {
             toggleLock("sendOfflineAfterOnlineLocked", (TextCheckCell) view);
+        } else if (position == useScheduledMessagesRow) {
+            NekoConfig.useScheduledMessages.setConfigBool(!NekoConfig.useScheduledMessages.Bool());
+            NekoConfig.useScheduledMessages.saveConfig();
+            ((TextCheckCell) view).setChecked(NekoConfig.useScheduledMessages.Bool());
         } else if (position == showGhostModeStatusRow) {
             NekoConfig.showGhostModeStatus.setConfigBool(!NekoConfig.showGhostModeStatus.Bool());
             NekoConfig.showGhostModeStatus.saveConfig();
@@ -233,6 +239,8 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.LockDontReadStories), NekoConfig.isGhostLocked("sendReadStoryPacketsLocked"), divider);
                     } else if (position == lockOfflineRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.LockSendOfflinePacketAfterOnline), NekoConfig.isGhostLocked("sendOfflineAfterOnlineLocked"), divider);
+                    } else if (position == useScheduledMessagesRow) {
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.UseScheduledMessages), NekoConfig.useScheduledMessages.Bool(), divider);
                     } else if (position == showGhostModeStatusRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowGhostModeStatus), NekoConfig.showGhostModeStatus.Bool(), divider);
                     }
@@ -285,7 +293,7 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
             if (position == markReadAfterSendRow || position == showGhostToggleInDrawerRow
                     || position == lockReadRow || position == lockOnlineRow || position == lockUploadRow
                     || position == lockStoryRow || position == lockOfflineRow
-                    || position == showGhostModeStatusRow) {
+                    || position == showGhostModeStatusRow || position == useScheduledMessagesRow) {
                 return TYPE_CHECK;
             }
             return super.getItemViewType(position);

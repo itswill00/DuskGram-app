@@ -391,6 +391,7 @@
     <string name="LockDontReadStories">Always hide story views</string>
     <string name="LockSendOfflinePacketAfterOnline">Always go offline after sending</string>
     <string name="ShowGhostModeStatus">Show Ghost Mode status</string>
+    <string name="UseScheduledMessages">Send as scheduled</string>
     <string name="GhostModeOn">on</string>
     <string name="GhostModeOff">off</string>
     <string name="DrawerOrderTitle">Drawer order</string>
