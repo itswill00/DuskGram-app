@@ -24,6 +24,7 @@ import tw.nekomimi.nekogram.settings.NekoDebugSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoExperimentalSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoGeneralSettingsActivity;
 import tw.nekomimi.nekogram.settings.NekoEmojiSettingsActivity;
+import tw.nekomimi.nekogram.settings.AyuMomentsActivity;
 import tw.nekomimi.nekogram.settings.DrawerMenuActivity;
 import tw.nekomimi.nekogram.settings.NekoGhostModeActivity;
 import tw.nekomimi.nekogram.settings.NekoPasscodeSettingsActivity;
@@ -74,6 +75,10 @@ public class SettingsHelper {
                 case "ghostmode":
                 case "ghost":
                     fragment = neko_fragment = new NekoGhostModeActivity();
+                    break;
+                case "ayumoments":
+                case "moments":
+                    fragment = nekox_fragment = new AyuMomentsActivity();
                     break;
                 case "drawer":
                 case "drawerorder":
@@ -143,6 +148,7 @@ public class SettingsHelper {
         xFragments.add(new NekoExperimentalSettingsActivity());
         xFragments.add(new NekoDebugSettingsActivity());
         xFragments.add(new NekoAccountSettingsActivity());
+        xFragments.add(new AyuMomentsActivity());
 
         for (BaseNekoXSettingsActivity fragment : xFragments) {
             int drawable = fragment.getDrawable();

@@ -63,6 +63,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     private int chatRow;
     private int passcodeRow;
     private int experimentRow;
+    private int ayuMomentsRow;
     private int drawerMenuRow;
     private int ghostModeRow;
     private int debugRow;
@@ -108,6 +109,8 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             presentFragment(new NekoPasscodeSettingsActivity());
         } else if (position == experimentRow) {
             presentFragment(new NekoExperimentalSettingsActivity());
+        } else if (position == ayuMomentsRow) {
+            presentFragment(new AyuMomentsActivity());
         } else if (position == drawerMenuRow) {
             presentFragment(new DrawerMenuActivity());
         } else if (position == ghostModeRow) {
@@ -173,6 +176,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             passcodeRow = -1;
         }
         experimentRow = addRow("experiment");
+        ayuMomentsRow = addRow("ayuMoments");
         drawerMenuRow = addRow("drawerMenu");
         ghostModeRow = addRow("ghostMode");
         debugRow = addRow("debug");
@@ -246,6 +250,8 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.PasscodeNeko), R.drawable.msg_secret, divider);
                     } else if (position == experimentRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Experiment), R.drawable.msg_fave, divider);
+                    } else if (position == ayuMomentsRow) {
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.AyuMoments), R.drawable.msg2_reactions2, divider);
                     } else if (position == drawerMenuRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.DrawerOrderTitle), R.drawable.list_reorder, divider);
                     } else if (position == ghostModeRow) {
