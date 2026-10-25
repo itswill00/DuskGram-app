@@ -153,9 +153,9 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
         } else if (position == lockOfflineRow) {
             toggleLock("sendOfflineAfterOnlineLocked", (TextCheckCell) view);
         } else if (position == showGhostModeStatusRow) {
-            NekoConfig.showGhostModeStatus ^= true;
-            NekoConfig.putBoolean("showGhostModeStatus", NekoConfig.showGhostModeStatus);
-            ((TextCheckCell) view).setChecked(NekoConfig.showGhostModeStatus);
+            NekoConfig.showGhostModeStatus.setConfigBool(!NekoConfig.showGhostModeStatus.Bool());
+            NekoConfig.showGhostModeStatus.saveConfig();
+            ((TextCheckCell) view).setChecked(NekoConfig.showGhostModeStatus.Bool());
             NotificationCenter.getInstance(UserConfig.selectedAccount).postNotificationName(NotificationCenter.mainUserInfoChanged);
         } else if (position == showGhostToggleInDrawerRow) {
             NekoConfig.putBoolean("showGhostToggleInDrawer", NekoConfig.showGhostToggleInDrawer ^= true);
@@ -233,7 +233,7 @@ public class NekoGhostModeActivity extends BaseNekoSettingsActivity {
                     } else if (position == lockOfflineRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString(R.string.LockSendOfflinePacketAfterOnline), NekoConfig.isGhostLocked("sendOfflineAfterOnlineLocked"), divider);
                     } else if (position == showGhostModeStatusRow) {
-                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowGhostModeStatus), NekoConfig.showGhostModeStatus, divider);
+                        textCheckCell.setTextAndCheck(LocaleController.getString(R.string.ShowGhostModeStatus), NekoConfig.showGhostModeStatus.Bool(), divider);
                     }
                     break;
                 case TYPE_CHECK2:

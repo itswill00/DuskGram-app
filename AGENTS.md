@@ -95,8 +95,25 @@ overwrites the APKs in the output directory.
 
 ## 7. Commits
 
-Author `itswill00 <anstykx00@gmail.com>`, with the trailer:
+Conventional Commits with trailers. Template lives in `.gitmessage` and is wired
+up via `git config commit.template .gitmessage`.
 
 ```
+<type>(<scope>): <imperative subject, <=72 chars>
+
+<body: why, wrapped at 72 columns>
+
+Refs: <short-sha>
+Fixes: <short-sha>
+Signed-off-by: itswill00 <anstykx00@gmail.com>
 Co-authored-by: Claude Code <noreply@anthropic.com>
 ```
+
+- `type`: feat | fix | refactor | perf | docs | build | ci | chore | test
+- `scope`: settings | ghost | drawer | updater | release | repo | search | deps
+- **Always** end with `Signed-off-by: itswill00 <anstykx00@gmail.com>`.
+- **Always** name the related commit when one exists: `Fixes: <sha>` when this
+  repairs a bug introduced by that commit, `Refs: <sha>` when it builds on,
+  follows up, or depends on it. A change with no related commit omits both.
+- Author is `itswill00 <anstykx00@gmail.com>`; add
+  `Co-authored-by: Claude Code <noreply@anthropic.com>`.

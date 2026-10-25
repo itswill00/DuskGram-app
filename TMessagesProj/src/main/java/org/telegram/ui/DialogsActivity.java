@@ -13842,7 +13842,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /** Drawer label for Ghost Mode; appends the current state when enabled. */
     private String ghostDrawerTitle() {
         String base = getString(R.string.GhostMode);
-        if (!NekoConfig.showGhostModeStatus) {
+        if (!NekoConfig.showGhostModeStatus.Bool()) {
             return base;
         }
         String state = NekoConfig.isGhostModeActive()

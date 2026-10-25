@@ -41,7 +41,7 @@ public class NekoConfig {
     public static boolean sendUploadProgressLocked;
     public static boolean sendReadStoryPacketsLocked;
     public static boolean sendOfflineAfterOnlineLocked;
-    public static boolean showGhostModeStatus;
+    public static ConfigItem showGhostModeStatus = addConfig("showGhostModeStatus", configTypeBool, false);
     public static final String channelAliasPrefix = "channelAliasPrefix_";
 
     private static boolean configLoaded = false;
@@ -312,7 +312,6 @@ public class NekoConfig {
             sendUploadProgressLocked = preferences.getBoolean("sendUploadProgressLocked", false);
             sendReadStoryPacketsLocked = preferences.getBoolean("sendReadStoryPacketsLocked", false);
             sendOfflineAfterOnlineLocked = preferences.getBoolean("sendOfflineAfterOnlineLocked", false);
-            showGhostModeStatus = preferences.getBoolean("showGhostModeStatus", false);
 
             NkmrConfig.compact();
             configLoaded = true;

@@ -1,0 +1,21 @@
+# Commit message template — DuskGram
+#
+# Format (Conventional Commits + trailers):
+#
+#   <type>(<scope>): <subject, imperative, <=72 chars>
+#
+#   <body: why the change is needed, wrapped at 72 columns>
+#
+#   Refs: <short-sha>        # the commit this builds on or fixes
+#   Fixes: <short-sha>       # the commit whose bug this repairs
+#   Signed-off-by: itswill00 <anstykx00@gmail.com>
+#   Co-authored-by: Claude Code <noreply@anthropic.com>
+#
+# type: feat | fix | refactor | perf | docs | build | ci | chore | test
+# scope: settings | ghost | drawer | updater | release | repo | search | deps
+#
+# Rules:
+#   - Every commit carries Signed-off-by for itswill00.
+#   - A commit that fixes, follows up, or depends on another commit names that
+#     commit's short hash in Refs: or Fixes:.
+#   - Subject line is imperative ("Add", not "Added").
