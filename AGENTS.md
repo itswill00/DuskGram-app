@@ -76,7 +76,23 @@ build after every small edit.
 - When a build is genuinely needed, prefer `--fast` for iteration and save the
   full R8 build for the release itself.
 
-## 5. Never clean
+## 5. Verify before shipping a test build
+
+A successful build only proves the code compiles. Startup crashes, static-init
+ordering bugs and ANRs survive compilation and only show up at runtime.
+
+Before posting a `--test` build:
+
+- Check static initialisation order in `NekoConfig`: every `addConfig(...)`
+  must appear **after** the `configs` list declaration, because Java runs
+  static field initialisers in declaration order.
+- Re-read every changed call path for null-safety and bounds. In particular,
+  anything called from `onBindViewHolder` must not throw: a throw there makes
+  RecyclerView retry forever and turns into an ANR, not a clean crash.
+- Say plainly which flows were **not** executed. Never describe a build as
+  working when only the compile step was verified.
+
+## 6. Never clean
 
 All builds go through `./build.sh` and stay incremental. No `clean`, no
 `./gradlew clean`.
@@ -87,13 +103,13 @@ published; `build.sh` refuses to combine `--fast` with `--send`/`--release`.
 Always finish with a normal build before releasing, because a fast build
 overwrites the APKs in the output directory.
 
-## 6. Channel and credentials
+## 7. Channel and credentials
 
 - Channel: <https://t.me/duskgramclient> (`-1003266002885`)
 - Bot: `@nagramforkci_bot` (DuskGram-CI), channel administrator.
 - Credentials live in `.telegram.env`, which is gitignored. Never commit it.
 
-## 7. Commits
+## 8. Commits
 
 Conventional Commits with trailers. Template lives in `.gitmessage` and is wired
 up via `git config commit.template .gitmessage`.
