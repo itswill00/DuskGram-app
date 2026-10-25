@@ -63,6 +63,9 @@ public class AyuMomentsActivity extends BaseNekoXSettingsActivity {
         View view = super.createView(context);
         listAdapter = new ListAdapter(context);
         listView.setAdapter(listAdapter);
+        cellGroup.setListAdapter(listView, listAdapter);
+        // Rows act on themselves; without this listener nothing responds to taps.
+        listView.setOnItemClickListener(this::handleCellClick);
         return view;
     }
 

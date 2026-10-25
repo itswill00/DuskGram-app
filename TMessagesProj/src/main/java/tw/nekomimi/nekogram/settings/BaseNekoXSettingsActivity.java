@@ -209,6 +209,36 @@ public class BaseNekoXSettingsActivity extends BaseFragment {
         return titles;
     }
 
+    /**
+     * Default click handling for a CellGroup row: each cell knows how to act on
+     * itself, so screens do not have to wire every row type by hand.
+     */
+    protected void handleCellClick(View view, int position, float x, float y) {
+        if (cellGroup == null || position < 0 || position >= cellGroup.rows.size()) {
+            return;
+        }
+        AbstractConfigCell cell = cellGroup.rows.get(position);
+        if (cell == null) {
+            return;
+        }
+        if (cell instanceof ConfigCellTextCheck) {
+            ((ConfigCellTextCheck) cell).onClick((TextCheckCell) view);
+        } else if (cell instanceof ConfigCellSelectBox) {
+            ((ConfigCellSelectBox) cell).onClick(view);
+        } else if (cell instanceof ConfigCellTextInput) {
+            ((ConfigCellTextInput) cell).onClick();
+        } else if (cell instanceof ConfigCellAutoTextCheck) {
+            ((ConfigCellAutoTextCheck) cell).onClick();
+        } else if (cell instanceof ConfigCellTextDetail) {
+            RecyclerListView.OnItemClickListener listener = ((ConfigCellTextDetail) cell).onItemClickListener;
+            if (listener != null) {
+                listener.onItemClick(view, position);
+            }
+        } else if (cell instanceof WithOnClick) {
+            ((WithOnClick) cell).onClick();
+        }
+    }
+
     protected String getRowKey(AbstractConfigCell row) {
         if (row instanceof WithKey) {
             return ((WithKey) row).getKey();
