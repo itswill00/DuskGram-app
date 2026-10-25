@@ -13946,22 +13946,45 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         });
         if (NaConfig.INSTANCE.getCustomDialogsMenuTheme().Bool())
         io.addGap();
-        io.addIf(NaConfig.INSTANCE.getShowRecentChatsInSidebar().Bool(), R.drawable.msg2_autodelete, LocaleController.getString(R.string.RecentChats), () -> {
-            presentFragment(new tw.nekomimi.nekogram.ChatHistoryActivity());
-        });
-        io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuNewGroup().Bool(), R.drawable.outline_groups_24, getString(R.string.NewGroup), () -> {
-            Bundle args = new Bundle();
-            presentFragment(new GroupCreateActivity(args));
-        });
-        io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuNewMessage().Bool(), R.drawable.outline_groups_24, getString(R.string.NewMessageTitle), this::openWriteContacts);
-        io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuSavedMessages().Bool(), R.drawable.outline_saved_24, getString(R.string.SavedMessages), () -> {
-            Bundle args = new Bundle();
-            args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
-            presentFragment(new ChatActivity(args));
-        });
-        io.addIf(NekoConfig.showGhostToggleInDrawer, R.drawable.icon_ghost, ghostDrawerTitle(), () -> {
-            presentFragment(new NekoGhostModeActivity());
-        });
+        // Order comes from Dusk Settings -> Drawer order; each row still decides
+        // its own visibility, so a missing entry can never hide anything.
+        for (String drawerId : NekoConfig.DrawerOrder.current()) {
+            switch (drawerId) {
+                case "recent":
+                    io.addIf(NaConfig.INSTANCE.getShowRecentChatsInSidebar().Bool(), R.drawable.msg2_autodelete, LocaleController.getString(R.string.RecentChats), () -> {
+                        presentFragment(new tw.nekomimi.nekogram.ChatHistoryActivity());
+                    });
+                    break;
+                case "newgroup":
+                    io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuNewGroup().Bool(), R.drawable.outline_groups_24, getString(R.string.NewGroup), () -> {
+                        Bundle args = new Bundle();
+                        presentFragment(new GroupCreateActivity(args));
+                    });
+                    break;
+                case "newmessage":
+                    io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuNewMessage().Bool(), R.drawable.outline_groups_24, getString(R.string.NewMessageTitle), this::openWriteContacts);
+                    break;
+                case "saved":
+                    io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuSavedMessages().Bool(), R.drawable.outline_saved_24, getString(R.string.SavedMessages), () -> {
+                        Bundle args = new Bundle();
+                        args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
+                        presentFragment(new ChatActivity(args));
+                    });
+                    break;
+                case "ghost":
+                    io.addIf(NekoConfig.showGhostToggleInDrawer, R.drawable.icon_ghost, ghostDrawerTitle(), () -> {
+                        presentFragment(new NekoGhostModeActivity());
+                    });
+                    break;
+                case "profile":
+                    io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuMyProfile().Bool(), R.drawable.msg_openprofile, getString(R.string.MyProfile), () -> {
+                        Bundle args = new Bundle();
+                        args.putLong("user_id", UserConfig.getInstance(currentAccount).getClientUserId());
+                        presentFragment(new ProfileActivity(args));
+                    });
+                    break;
+            }
+        }
         if (ApplicationLoader.applicationLoaderInstance != null) {
             ApplicationLoader.applicationLoaderInstance.addItemOptions(io);
         }
@@ -13995,11 +14018,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         }
-        io.addIf(NaConfig.INSTANCE.getCustomDialogsMenuMyProfile().Bool(), R.drawable.msg_openprofile, getString(R.string.MyProfile), () -> {
-            Bundle args = new Bundle();
-            args.putLong("user_id", getUserConfig().getClientUserId());
-            presentFragment(new ProfileActivity(args));
-        });
         boolean noMainTabs = (NaConfig.INSTANCE.getMainTabsStyle().Int() == MainTabsStyle.DISABLE.getValue() || getUserConfig().showCallsTab) && !NaConfig.INSTANCE.getSidebarSettingsActivity().Bool();
         if (NaConfig.INSTANCE.getCustomDialogsMenuSettings().Bool() || noMainTabs) {
             io.add(R.drawable.msg_settings_old, getString(R.string.Settings), () -> {

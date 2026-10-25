@@ -200,6 +200,8 @@ public class NekoConfig {
     public static ConfigItem hideGroupSticker = addConfig("hideGroupSticker", configTypeBool, false);
     public static ConfigItem disablePremiumStickerAnimation = addConfig("disablePremiumStickerAnimation", configTypeBool, false);
     public static ConfigItem hideSponsoredMessage = addConfig("hideSponsoredMessage", configTypeBool, false);
+    // Comma separated drawer row order; see DrawerOrder.
+    public static ConfigItem drawerOrder = addConfig("drawerOrder", configTypeString, "");
     // Ads are suppressed by default; the switch only exists so it can be re-enabled.
     public static ConfigItem disableAds = addConfig("DisableAds", configTypeBool, true);
     public static ConfigItem rememberAllBackMessages = addConfig("rememberAllBackMessages", configTypeBool, false);
@@ -630,5 +632,61 @@ public class NekoConfig {
 
     public static boolean fixDriftingForGoogleMaps() {
         return !useOSMDroidMap.Bool() && mapDriftingFixForGoogleMaps.Bool();
+    }
+
+    /**
+     * Ordering of the configurable rows in the main menu drawer.
+     *
+     * Only the relative order is stored; whether a row is shown at all stays
+     * controlled by its own switch. Unknown ids are ignored and any known id
+     * missing from the stored value keeps its default position at the end, so
+     * adding a new row in a future build can never hide it.
+     */
+    public static final class DrawerOrder {
+        public static final String[] DEFAULT = {
+                "recent", "newgroup", "newmessage", "saved", "ghost", "profile"
+        };
+
+        /** Stored order, always containing every known id exactly once. */
+        public static java.util.List<String> current() {
+            java.util.List<String> result = new java.util.ArrayList<>(DEFAULT.length);
+            String stored = drawerOrder.String();
+            if (stored != null && !stored.isEmpty()) {
+                for (String part : stored.split(",")) {
+                    String id = part.trim();
+                    if (id.isEmpty() || result.contains(id)) continue;
+                    if (!isKnown(id)) continue;
+                    result.add(id);
+                }
+            }
+            for (String id : DEFAULT) {
+                if (!result.contains(id)) {
+                    result.add(id);
+                }
+            }
+            return result;
+        }
+
+        public static boolean isDefault() {
+            return DEFAULT.length == current().size()
+                    && java.util.Arrays.equals(DEFAULT, current().toArray(new String[0]));
+        }
+
+        public static void save(java.util.List<String> order) {
+            drawerOrder.setConfigString(android.text.TextUtils.join(",", order));
+            drawerOrder.saveConfig();
+        }
+
+        public static void reset() {
+            drawerOrder.setConfigString("");
+            drawerOrder.saveConfig();
+        }
+
+        private static boolean isKnown(String id) {
+            for (String known : DEFAULT) {
+                if (known.equals(id)) return true;
+            }
+            return false;
+        }
     }
 }

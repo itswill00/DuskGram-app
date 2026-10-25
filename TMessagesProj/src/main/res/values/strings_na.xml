@@ -393,6 +393,8 @@
     <string name="ShowGhostModeStatus">Show Ghost Mode status</string>
     <string name="GhostModeOn">on</string>
     <string name="GhostModeOff">off</string>
+    <string name="DrawerOrderTitle">Drawer order</string>
+    <string name="DrawerOrderInfo">Drag rows to change their order in the main menu. Visibility is controlled by each row\'s own switch.</string>
     <string name="MessagePreviewText">since i want the code to be terrible i am ||vibe-coding||</string>
     <string name="MessagePreviewPollQuestion">How is the code?</string>
     <string name="MessagePreviewPollAnswerTerrible">Terrible</string>

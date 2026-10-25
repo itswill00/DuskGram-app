@@ -63,6 +63,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
     private int chatRow;
     private int passcodeRow;
     private int experimentRow;
+    private int drawerMenuRow;
     private int ghostModeRow;
     private int debugRow;
     private int categories2Row;
@@ -107,6 +108,8 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             presentFragment(new NekoPasscodeSettingsActivity());
         } else if (position == experimentRow) {
             presentFragment(new NekoExperimentalSettingsActivity());
+        } else if (position == drawerMenuRow) {
+            presentFragment(new DrawerMenuActivity());
         } else if (position == ghostModeRow) {
             presentFragment(new NekoGhostModeActivity());
         } else if (position == debugRow) {
@@ -170,6 +173,7 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
             passcodeRow = -1;
         }
         experimentRow = addRow("experiment");
+        drawerMenuRow = addRow("drawerMenu");
         ghostModeRow = addRow("ghostMode");
         debugRow = addRow("debug");
         categories2Row = addRow();
@@ -242,6 +246,8 @@ public class NekoSettingsActivity extends BaseNekoSettingsActivity {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.PasscodeNeko), R.drawable.msg_secret, divider);
                     } else if (position == experimentRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.Experiment), R.drawable.msg_fave, divider);
+                    } else if (position == drawerMenuRow) {
+                        textCell.setTextAndIcon(LocaleController.getString(R.string.DrawerOrderTitle), R.drawable.list_reorder, divider);
                     } else if (position == ghostModeRow) {
                         textCell.setTextAndIcon(LocaleController.getString(R.string.GhostMode), R.drawable.icon_ghost, divider);
                     } else if (position == debugRow) {
